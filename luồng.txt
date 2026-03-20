@@ -1,0 +1,171 @@
+================================================================
+        QWIKCHAT — LUỒNG NGHIỆP VỤ TRẢI NGHIỆM
+================================================================
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+I. TRUY CẬP ỨNG DỤNG
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+1. Người dùng mở URL → Giao diện chính hiện ra ngay (không cần đăng ký)
+2. Sidebar bên trái hiện danh sách phòng chat
+3. Hệ thống tự gợi ý nickname ngẫu nhiên (ví dụ: "User#4821")
+4. Người dùng có thể giữ nickname gợi ý hoặc tự nhập nickname khác
+
+Không có màn hình đăng nhập riêng — xác thực nickname xảy ra
+tự động khi người dùng bấm vào phòng lần đầu.
+
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+II. LUỒNG NGƯỜI DÙNG
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+──────────────────────────────────────────────────────────────
+A. XÁC THỰC NICKNAME
+──────────────────────────────────────────────────────────────
+
+Bước 1 — Nhập nickname
+  • Người dùng nhập nickname vào ô ở sidebar
+  • Bấm vào bất kỳ phòng nào → Modal "Xác thực nickname" hiện ra
+
+Bước 2 — Tạo hoặc xác nhận mật khẩu
+  • Nếu nickname chưa tồn tại → Đây là lần tạo mới:
+      - Nhập mật khẩu (tối thiểu 4 ký tự)
+      - Bấm "Xác nhận" → Tài khoản được tạo, vào phòng ngay
+  • Nếu nickname đã tồn tại → Phải nhập đúng mật khẩu đã đặt:
+      - Nhập đúng → Vào phòng thành công, icon 🔒 hiện bên cạnh nickname
+      - Nhập sai  → Hiện thông báo lỗi "Sai mật khẩu cho nickname này"
+
+Lưu ý:
+  • Nickname + mật khẩu được lưu trong phiên làm việc (sessionStorage)
+  • Sang tab mới hoặc reload → Cần xác thực lại khi vào phòng lần đầu
+
+
+──────────────────────────────────────────────────────────────
+B. THAM GIA PHÒNG CHAT
+──────────────────────────────────────────────────────────────
+
+Bước 1 — Chọn phòng
+  • Danh sách phòng hiện ở sidebar, sắp xếp theo hoạt động mới nhất
+  • Mỗi phòng hiện: tên, mô tả ngắn, preview tin nhắn cuối, badge số tin chưa đọc
+  • Có thể tìm kiếm phòng theo tên bằng ô search
+
+Bước 2 — Vào phòng
+  • Bấm vào phòng → Xác thực nickname (nếu chưa xác thực trong phiên)
+  • Vào phòng thành công → Khu vực chat hiện ở giữa màn hình
+  • Lịch sử tin nhắn tải về và hiển thị
+
+Bước 3 — Gửi tin nhắn
+  • Nhập nội dung vào ô chat phía dưới → Bấm Enter hoặc nút gửi
+  • Tin nhắn hiện ngay cho tất cả người trong phòng (real-time)
+  • Hệ thống hiện thông báo "... đang nhập" khi người khác đang gõ
+
+──────────────────────────────────────────────────────────────
+C. REPLY TIN NHẮN
+──────────────────────────────────────────────────────────────
+
+  • Hover vào tin nhắn bất kỳ → Hiện nút Reply
+  • Bấm Reply → Ô chat hiện preview tin nhắn đang reply
+  • Nhập nội dung → Gửi → Tin nhắn mới hiện kèm trích dẫn tin gốc
+  • Bấm X ở ô preview để hủy reply
+
+──────────────────────────────────────────────────────────────
+D. XEM THÀNH VIÊN TRONG PHÒNG
+──────────────────────────────────────────────────────────────
+
+  • Bấm vào icon thành viên ở góc trên phòng chat
+  • Panel bên phải hiện ra: danh sách tất cả người đã từng vào phòng
+  • Người đang online (heartbeat < 60 giây) → Có chấm xanh
+  • Người offline → Không có chấm
+
+──────────────────────────────────────────────────────────────
+E. THÔNG BÁO TIN CHƯA ĐỌC
+──────────────────────────────────────────────────────────────
+
+  • Đang ở phòng A, có tin nhắn mới ở phòng B:
+      - Phòng B tự động nhảy lên đầu danh sách
+      - Hiện badge xanh với số tin chưa đọc
+      - Hiện preview nội dung tin mới nhất
+  • Bấm vào phòng B → Badge biến mất, đánh dấu đã đọc
+  • Hệ thống tự kiểm tra tin chưa đọc mỗi 3 giây
+
+──────────────────────────────────────────────────────────────
+F. LƯU DRAFT
+──────────────────────────────────────────────────────────────
+
+  • Đang nhập dở ở phòng A → Chuyển sang phòng B
+  • Quay lại phòng A → Nội dung đang nhập được khôi phục tự động
+  • Draft lưu trong localStorage, tồn tại qua reload trang
+
+──────────────────────────────────────────────────────────────
+G. TỰ ĐỘNG KẾT NỐI LẠI
+──────────────────────────────────────────────────────────────
+
+  • Mất kết nối WebSocket (mạng yếu, server restart...):
+      - Hệ thống tự thử kết nối lại: 3s → 6s → 12s → 24s → 30s
+      - Tối đa 5 lần thử
+      - Hiện thông báo "Đang kết nối lại..." trong giao diện
+  • Kết nối lại thành công → Chat tiếp tục bình thường
+
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+III. QUẢN LÝ PHÒNG
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+──────────────────────────────────────────────────────────────
+A. TẠO PHÒNG MỚI
+──────────────────────────────────────────────────────────────
+
+Bước 1 — Mở form tạo phòng
+  • Bấm nút "+" ở sidebar → Modal "Tạo phòng" hiện ra
+
+Bước 2 — Điền thông tin
+  • Nhập tên phòng (bắt buộc)
+  • Nhập mô tả phòng (tùy chọn)
+  • Đặt mật khẩu phòng (bắt buộc — dùng để xóa phòng sau này)
+
+Bước 3 — Tạo
+  • Bấm "Tạo phòng" → Phòng xuất hiện ngay trong danh sách
+  • Hệ thống tự động vào phòng vừa tạo
+
+──────────────────────────────────────────────────────────────
+B. XÓA PHÒNG
+──────────────────────────────────────────────────────────────
+
+Bước 1 — Mở tùy chọn xóa
+  • Hover vào phòng trong sidebar → Hiện nút 🗑️
+  • Bấm → Modal "Xóa phòng" hiện ra
+
+Bước 2 — Xác nhận bằng mật khẩu phòng
+  • Nhập đúng mật khẩu đã đặt khi tạo phòng → Bấm "Xóa"
+  • Nhập sai → Hiện thông báo lỗi, không xóa được
+
+Bước 3 — Kết quả
+  • Phòng bị xóa khỏi danh sách (soft delete — dữ liệu vẫn giữ trong DB)
+  • Người đang ở trong phòng đó bị chuyển ra ngoài
+
+Lưu ý:
+  • Bất kỳ ai biết mật khẩu phòng đều có thể xóa
+  • Không có khái niệm "chủ phòng" — mọi người bình đẳng
+
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+IV. LUỒNG VẬN HÀNH MỘT PHIÊN CHAT ĐIỂN HÌNH
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+Mở app:
+  1. Truy cập URL → Thấy danh sách phòng ngay lập tức
+  2. Đặt nickname theo ý muốn ở sidebar
+  3. Chọn phòng muốn vào → Xác thực nickname lần đầu
+
+Trong phiên:
+  4. Chat real-time với mọi người trong phòng
+  5. Reply tin nhắn khi cần trả lời cụ thể ai đó
+  6. Chuyển qua lại giữa các phòng → Draft được giữ nguyên
+  7. Badge tự động thông báo khi có tin mới ở phòng khác
+
+Quản lý:
+  8. Tạo phòng mới nếu cần không gian chat riêng
+  9. Chia sẻ tên phòng + mật khẩu phòng cho người muốn mời
+  10. Xóa phòng khi không còn cần (cần mật khẩu phòng)
+
+================================================================

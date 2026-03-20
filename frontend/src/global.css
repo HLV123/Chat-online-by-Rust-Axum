@@ -1,0 +1,105 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  --fb-blue: #0866FF;
+  --fb-bg: #FFFFFF;
+  --fb-sidebar: #F0F2F5;
+  --fb-card: #FFFFFF;
+  --fb-hover: #F0F2F5;
+  --fb-border: #CED0D4;
+  --fb-text: #050505;
+  --fb-text-secondary: #65676B;
+  --fb-input-bg: #F0F2F5;
+  --fb-green: #31A24C;
+  --fb-messenger: #0084FF;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --fb-bg: #18191A;
+    --fb-sidebar: #242526;
+    --fb-card: #242526;
+    --fb-hover: #3A3B3C;
+    --fb-border: #3E4042;
+    --fb-text: #E4E6EB;
+    --fb-text-secondary: #B0B3B8;
+    --fb-input-bg: #3A3B3C;
+  }
+}
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+html, body {
+  font-family: "Segoe UI", "Helvetica Neue", Helvetica, Arial, sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+/* Facebook-style scrollbar */
+::-webkit-scrollbar {
+  width: 6px;
+}
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+::-webkit-scrollbar-thumb {
+  background: #65676B;
+  border-radius: 3px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: #8A8D91;
+}
+
+/* Messenger bubble animation */
+@keyframes messageFadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(8px) scale(0.97);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+.msg-animate {
+  animation: messageFadeIn 0.2s ease-out;
+}
+
+/* Typing dots */
+@keyframes typingDot {
+  0%, 60%, 100% { transform: translateY(0); opacity: 0.4; }
+  30% { transform: translateY(-4px); opacity: 1; }
+}
+.typing-dot:nth-child(1) { animation: typingDot 1.4s infinite 0s; }
+.typing-dot:nth-child(2) { animation: typingDot 1.4s infinite 0.2s; }
+.typing-dot:nth-child(3) { animation: typingDot 1.4s infinite 0.4s; }
+
+/* Online pulse */
+@keyframes onlinePulse {
+  0%, 100% { box-shadow: 0 0 0 0 rgba(49, 162, 76, 0.4); }
+  50% { box-shadow: 0 0 0 4px rgba(49, 162, 76, 0); }
+}
+.online-dot {
+  animation: onlinePulse 2s infinite;
+}
+
+/* Tooltip */
+.tooltip-wrapper {
+  position: relative;
+}
+.tooltip-wrapper:hover .tooltip-text {
+  opacity: 1;
+  visibility: visible;
+}
+.tooltip-text {
+  opacity: 0;
+  visibility: hidden;
+  transition: opacity 0.15s;
+}
